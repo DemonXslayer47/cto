@@ -9,13 +9,6 @@ import sqlalchemy
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import declared_attr
 
-#engine = create_engine('mssql+pyodbc://@' + DESKTOP-8FANH7R + '/' + BWorks + '?trusted_connection=yes&driver=ODBC+Driver+13+for+SQL+Server  driver=SQL Server Native Client 11.0')')
-
-#engine = create_engine('mssql+pyodbc://@' + 'VINEETHA\MSSQL' + '/' + 'Mechazone' + '?trusted_connection=yes & driver=ODBC Driver 17 for SQL Server')
-
-#engine = create_engine('mssql+pyodbc://@' + '.' + '/' + 'Mechazone' + '?trusted_connection=yes & driver=driver=ODBC Driver 17 for SQL Server')
-
-#engine = create_engine('mssql+pyodbc://@' + '.' + '/' + 'Mechazone' + '?trusted_connection=yes & driver=SQL Server')
 #engine = create_engine('mssql+pyodbc://@' + '.' + '/' + 'Mechazone' + '?trusted_connection=yes & driver=ODBC Driver 17 for SQL Server')
 
 connection_string = 'mssql+pyodbc://@' + '.' + '/' + 'Mechazone' + '?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server'
