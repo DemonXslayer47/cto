@@ -11,7 +11,7 @@ from sqlalchemy.orm import declared_attr
 
 #engine = create_engine('mssql+pyodbc://@' + '.' + '/' + 'Mechazone' + '?trusted_connection=yes & driver=ODBC Driver 17 for SQL Server')
 
-connection_string = 'mssql+pyodbc://@' + '.' + '/' + 'Mechazone' + '?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server'
+connection_string = 'mssql+pyodbc://@' + '.' + '/' + 'Data_5710' + '?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server'
 engine = create_engine(connection_string)
 
 
@@ -42,13 +42,14 @@ class Users(Base):
     __tablename__ = "Users"
 
     UserId: int = Column(Integer, primary_key=True)
-    Name: str = Column(String,nullable=False )
-    ContactId: int = Column(Integer, nullable = False)
-    Email: str = Column(String, nullable = False)
-    Address: str = Column(String, nullable = False)
-    ZipCode: str = Column(String,nullable = False)
-    UserName: str = Column(String, nullable = False)
-    Password: str = Column(String, nullable = False)
+    Name: str = Column(String(255), nullable=False)
+    ContactId: int = Column(Integer, nullable=False)
+    Email: str = Column(String, nullable=False)
+    Address: str = Column(String, nullable=False)
+    ZipCode: str = Column(String, nullable=False)
+    UserName: str = Column(String, nullable=False)
+    Password: str = Column(String, nullable=False)
+
 
 def register_db(req):
 
