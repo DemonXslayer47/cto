@@ -74,8 +74,8 @@ def login_db(req):
 def data_db(req):
     try:
         with Session(engine) as session:
-            sql_statement = text("SELECT * FROM CTO WHERE Name = :PI")
-            query = session.execute(sql_statement, {'PI': req['Name']})
+            sql_statement = text("SELECT * FROM CTO WHERE PI = :PI")
+            query = session.execute(sql_statement, {'PI': req['PI']})
             result = query.first()
 
             if result:
