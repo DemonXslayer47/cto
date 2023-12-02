@@ -1,0 +1,39 @@
+.cto-container {
+  margin-top: 20px;
+  display: flex;
+}
+
+.left-container,
+.middle-container,
+.right-container {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin: 0 10px;
+  flex: 1;
+}
+
+.select-container {
+  width: 100%;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.right-container label,
+.left-container label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.right-container input,
+.left-container input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
