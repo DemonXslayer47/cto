@@ -15,6 +15,13 @@ def login():
     res = login_db(req)
     return jsonify(res)
 
+@app.route('/register', methods=['POST'])
+def register_user():
+    req = request.get_json()
+    print(req)
+    res = register_db(req)
+    return jsonify(res)
+
 @app.route('/data', methods=['POST'])
 def register_user():
     req = request.get_json()
