@@ -1,20 +1,17 @@
 from flask import Flask
-from flask import request, jsonify, render_template
 from flask_cors import CORS
-from sqlalchemy import create_engine, select, text
+from sqlalchemy import create_engine, text
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 
-app = Flask(__name__)
-CORS(app)
+app_db = Flask(__name__)
+CORS(app_db)
 
-# Define your database connection string
-connection_string = 'mssql+pyodbc://@' + '.' + '/' + 'Data_5710' + '?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server'
-engine = create_engine(connection_string)
+engine = create_engine('mssql+pyodbc:///?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server&server=.&database=Data_5710')
 
-# Define your declarative base
 Base = declarative_base()
+
 
 class Users(Base):
     __tablename__ = "Users"
@@ -28,8 +25,8 @@ class Users(Base):
     UserName = Column(String, nullable=False)
     Password = Column(String, nullable=False)
 
-# Initialize the database with the app
 Base.metadata.create_all(bind=engine)
+
 
 def register_db(req):
     stmt = Users.__table__.insert().values(
@@ -47,6 +44,7 @@ def register_db(req):
         conn.commit()
 
     return {"issuccess": True}
+
 
 def login_db(req):
     try:
@@ -68,10 +66,11 @@ def login_db(req):
                 return response
             else:
                 return {"error": "Invalid credentials"}
-
     except Exception as e:
         print(e)
         return {}
 
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app_db.run(debug=True)
