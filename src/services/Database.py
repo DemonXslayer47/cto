@@ -69,6 +69,88 @@ def login_db(req):
     except Exception as e:
         print(e)
         return {}
+    
+
+def data_db(req):
+    try:
+        with Session(engine) as session:
+            sql_statement = text("SELECT * FROM CTO WHERE Name = :PI")
+            query = session.execute(sql_statement, {'PI': req['Name']})
+            result = query.first()
+
+            if result:
+                response = {
+                    "Orig. Submit Date": getattr(result, 'OrigSubmitDate', None),
+                    "IRB Submit Date": getattr(result, 'IRBSubmitDate', None),
+                    "Pause Date": getattr(result, 'PauseDate', None),
+                    "Restart Date": getattr(result, 'RestartDate', None),
+                    "Est. Start Date": getattr(result, 'EstStartDate', None),
+                    "eRS/WD": getattr(result, 'eRSWD', None),
+                    "IRB": getattr(result, 'IRB', None),
+                    "PI": getattr(result, 'PI', None),
+                    "SC": getattr(result, 'SC', None),
+                    "Dept": getattr(result, 'Dept', None),
+                    "Study Feasibility": getattr(result, 'StudyFeasibility', None),
+                    "Sponsor / Protocol": getattr(result, 'SponsorProtocol', None),
+                    "ICF": getattr(result, 'ICF', None),
+                    "IDE IND": getattr(result, 'IDEIND', None),
+                    "CTA": getattr(result, 'CTA', None),
+                    "SSM Fac": getattr(result, 'SSMFac', None),
+                    "SSM Pharm": getattr(result, 'SSMPharm', None),
+                    "SSM RBR Approval": getattr(result, 'SSMRBRApproval', None),
+                    "CTO CA": getattr(result, 'CTOCA', None),
+                    "CTO Budget": getattr(result, 'CTOBudget', None),
+                    "CTO IRB Check List": getattr(result, 'CTOIRBCheckList', None),
+                    "CTO CTMS": getattr(result, 'CTOCTMS', None),
+                    "CTO/EPIC": getattr(result, 'CTOEPIC', None),
+                    "CTO WD Grant": getattr(result, 'CTOWDGrant', None),
+                    "IRB Approval": getattr(result, 'IRBApproval', None),
+                    "Status": getattr(result, 'Status', None),
+                    "Type": getattr(result, 'Type', None),
+                    "FY": getattr(result, 'FY', None),
+                    "FQ": getattr(result, 'FQ', None),
+                    "CTO DO": getattr(result, 'CTODO', None),
+                    "IRB DO": getattr(result, 'IRBDO', None),
+                    "Goal": getattr(result, 'Goal', None),
+                    "Rate": getattr(result, 'Rate', None),
+                    "Complete Date": getattr(result, 'CompleteDate', None),
+                    "Project CTO TA": getattr(result, 'ProjectCTOTA', None),
+                    "Project IRB TA": getattr(result, 'ProjectIRBTA', None),
+                    "Which IRB": getattr(result, 'WhichIRB', None),
+                    "Protocol Version & Date": getattr(result, 'ProtocolVersionDate', None),
+                    "CTO Notes": getattr(result, 'CTONotes', None),
+                    "CTPI Notes": getattr(result, 'CTPINotes', None),
+                    "CA Develop Start Date": getattr(result, 'CADevelopStartDate', None),
+                    "CA SSM Appr. / Final Date": getattr(result, 'CASSMApprFinalDate', None),
+                    "CA Dev / Final TA": getattr(result, 'CADevFinalTA', None),
+                    "CA Submit / Start Dev TA": getattr(result, 'CASubmitStartDevTA', None),
+                    "CA Submit / Final TA": getattr(result, 'CASubmitFinalTA', None),
+                    "Budget Neg Start Date": getattr(result, 'BudgetNegStartDate', None),
+                    "Budget Final Date": getattr(result, 'BudgetFinalDate', None),
+                    "Budget Neg / Final TA": getattr(result, 'BudgetNegFinalTA', None),
+                    "Budget Submit / Final TA": getattr(result, 'BudgetSubmitFinalTA', None),
+                    "CTA Final Date": getattr(result, 'CTAFinalDate', None),
+                    "CTA Submit / Final TA": getattr(result, 'CTASubmitFinalTA', None),
+                    "CTA FE Date": getattr(result, 'CTAFEDate', None),
+                    "CTA Final / FE TA": getattr(result, 'CTAFinalFETA', None),
+                    "Local IRB Review Complete": getattr(result, 'LocalIRBReviewComplete', None),
+                    "CTO Checklist Rec'd": getattr(result, 'CTOChecklistRecd', None),
+                    "IRB Ancillary Reviews Rec'd": getattr(result, 'IRBAncillaryReviewsRecd', None),
+                    "IRB Comments Sent": getattr(result, 'IRBCommentsSent', None),
+                    "IRB SAF Signed": getattr(result, 'IRBSAFSigned', None),
+                    "Final IRB Approval Date": getattr(result, 'FinalIRBApprovalDate', None),
+                    "Local IRB Review Complete TA": getattr(result, 'LocalIRBReviewCompleteTA', None),
+                    "CTO Checklist Rec'd TA": getattr(result, 'CTOChecklistRecdTA', None),
+                    "IRB Ancillary Reviews Rec'd TA": getattr(result, 'IRBAncillaryReviewsRecdTA', None),
+                    "IRB Comment Sent TA": getattr(result, 'IRBCommentSentTA', None),
+                    "SIRB Approval TA": getattr(result, 'SIRBApprovalTA', None)
+                }
+                return response
+            else:
+                return {"error": "Invalid credentials"}
+    except Exception as e:
+        print(e)
+        return {}
 
 
 
