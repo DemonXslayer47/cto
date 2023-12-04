@@ -74,16 +74,8 @@ def login_db(req):
 def data_db(req):
     try:
         with Session(engine) as session:
-            sql_statement = text("""
-                SELECT * FROM CTO 
-                WHERE 
-                    PI = :PI 
-                    AND IRB = :IRB
-            """)
-            query_params = {
-                'PI': req['PI'],
-                'IRB': req['IRB']
-            }
+            sql_statement = text("SELECT * FROM CTO WHERE " + " AND ".join(f"{field} = :{field}" for field in req.keys()))
+            query_params = req
             print("Executing SQL statement:", sql_statement)
             print("Query Parameters:", query_params)
             

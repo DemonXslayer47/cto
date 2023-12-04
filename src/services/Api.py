@@ -36,15 +36,23 @@ def update():
     # return jsonify(res)
     return jsonify({"message": "Update endpoint called"})
 
-@app.route('/track', methods=['GET'])  # Change to GET method
-def track():
-    try:
-        # Call the function to fetch data
-        data = data_db()  # Implement this function in Database.py
-        return jsonify(data)
-    except Exception as e:
-        print("Error:", e)
-        return jsonify({"error": "An error occurred"})
+# @app.route('/track', methods=['GET'])  # Change to GET method
+# def track():
+#     try:
+#         # Call the function to fetch data
+#         data = data_db()  # Implement this function in Database.py
+#         return jsonify(data)
+#     except Exception as e:
+#         print("Error:", e)
+#         return jsonify({"error": "An error occurred"})
+    
+    # API endpoint for tracking
+@app.route('/track', methods=['POST'])
+def track_data():
+    req = request.get_json()
+    res = data_db(req)  # Implement data_db function to filter data based on req
+    return jsonify(res)
+
 
 @app.route('/data', methods=['POST'])
 def data():
