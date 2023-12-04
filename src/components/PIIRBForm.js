@@ -44,7 +44,7 @@ function PIIRBForm() {
 
       <div>
         <h2>Form Values:</h2>
-        <pre>{JSON.stringify(formValues, null, 2)}</pre>
+        <pre>{JSON.stringify(formValues)}</pre>
       </div>
     </div>
   );
