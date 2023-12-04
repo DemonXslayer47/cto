@@ -1,16 +1,19 @@
-// App.js
-
 import React from 'react';
-import PIIRBForm from './components/PIIRBForm';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import AuthPage from './components/AuthPage';
+import UpdateTrackPage from './components/UpdateTrackPage';
 
-const App = () => {
+function App() {
   return (
-    <div>
-      <h1>Welcome</h1>
-      <PIIRBForm /> {/* Render your form component here */}
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/update-track" element={<UpdateTrackPage />} />
+          <Route path="/" element={<AuthPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
-};
+}
 
 export default App;
