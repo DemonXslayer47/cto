@@ -77,12 +77,10 @@ def data_db(req):
                 SELECT * FROM CTO 
                 WHERE 
                     PI = :PI 
-                    AND [Orig. Submit Date] = :OrigSubmitDate 
                     AND IRB = :IRB
             """)
             query_params = {
                 'PI': req['PI'],
-                'OrigSubmitDate': req['Orig. Submit Date'],
                 'IRB': req['IRB']
             }
             print("Executing SQL statement:", sql_statement)
