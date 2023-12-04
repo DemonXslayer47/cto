@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request, jsonify
-from Database import register_db, login_db, data_db
+from Database import register_db, login_db, data_db,pidata_db,irbdata_db
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -31,6 +31,20 @@ def data():
     res = data_db(req)
     return jsonify(res)
 
+# @app.route('/pidata', methods=['POST'])
+# def pidata():
+#     req = request.get_json()
+#     print(req)
+#     res = pidata_db(req)
+#     return jsonify(res)
+
+
+# @app.route('/irbdata', methods=['POST'])
+# def irbdata():
+#     req = request.get_json()
+#     print(req)
+#     res = irbdata_db(req)
+#     return jsonify(res)
 
 if __name__ == "__main__":
     app.run(debug=True)
