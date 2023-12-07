@@ -8,8 +8,8 @@ from sqlalchemy.orm import Session
 app_db = Flask(__name__)
 CORS(app_db)
 
-#engine = create_engine('mssql+pyodbc:///?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server&server=.&database=Data_5710')
-engine = create_engine('mssql+pyodbc:///?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server&server=HP&database=CTO') #update the string with your sql server and db details.
+engine = create_engine('mssql+pyodbc:///?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server&server=.&database=Data_5710')
+#engine = create_engine('mssql+pyodbc:///?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server&server=HP&database=CTO') #update the string with your sql server and db details.
 
 Base = declarative_base()
 
@@ -71,84 +71,88 @@ def login_db(req):
         print(e)
         return {}
 
+
 def data_db(req):
     try:
+        # Remove extra spaces from keys in the payload
+        req = {key.strip(): value for key, value in req.items()}
+
         with Session(engine) as session:
             sql_statement = text("SELECT * FROM CTO WHERE " + " AND ".join(f"{field} = :{field}" for field in req.keys()))
             query_params = req
             print("Executing SQL statement:", sql_statement)
             print("Query Parameters:", query_params)
-            
+
             query = session.execute(sql_statement, query_params)
             results = query.fetchall()
 
             if results:
                 response = [
                     {
-                        "Orig. Submit Date": getattr(result, 'Orig. Submit Date', None),
-                        "IRB Submit Date": getattr(result, 'IRB Submit Date', None),
-                        "Pause Date": getattr(result, 'Pause Date', None),
-                        "Restart Date": getattr(result, 'Restart Date', None),
-                        "Est. Start Date": getattr(result, 'Est. Start Date', None),
-                        "eRS/WD": getattr(result, 'eRS/WD', None),
-                        "IRB": getattr(result, 'IRB', None),
-                        "PI": getattr(result, 'PI', None),
-                        "SC": getattr(result, 'SC', None),
-                        "Dept": getattr(result, 'Dept', None),
-                        "Study Feasibility": getattr(result, 'Study Feasibility', None),
-                        "Sponsor / Protocol": getattr(result, 'Sponsor / Protocol', None),
-                        "ICF": getattr(result, 'ICF', None),
-                        "IDE IND": getattr(result, 'IDE IND', None),
-                        "CTA": getattr(result, 'CTA', None),
-                        "SSM Fac": getattr(result, 'SSM Fac', None),
-                        "SSM Pharm": getattr(result, 'SSM Pharm', None),
-                        "SSM RBR Approval": getattr(result, 'SSM RBR Approval', None),
-                        "CTO CA": getattr(result, 'CTO CA', None),
-                        "CTO Budget": getattr(result, 'CTO Budget', None),
-                        "CTO IRB Check List": getattr(result, 'CTO IRB Check List', None),
-                        "CTO CTMS": getattr(result, 'CTO CTMS', None),
-                        "CTO/EPIC": getattr(result, 'CTO/EPIC', None),
-                        "CTO WD Grant": getattr(result, 'CTO WD Grant', None),
-                        "IRB Approval": getattr(result, 'IRB Approval', None),
-                        "Status": getattr(result, 'Status', None),
-                        "Type": getattr(result, 'Type', None),
-                        "FY": getattr(result, 'FY', None),
-                        "FQ": getattr(result, 'FQ', None),
-                        "CTO DO": getattr(result, 'CTO DO', None),
-                        "IRB DO": getattr(result, 'IRB DO', None),
-                        "Goal": getattr(result, 'Goal', None),
-                        "Rate": getattr(result, 'Rate', None),
-                        "Complete Date": getattr(result, 'Complete Date', None),
-                        "Project CTO TA": getattr(result, 'Project CTO TA', None),
-                        "Project IRB TA": getattr(result, 'Project IRB TA', None),
-                        "Which IRB": getattr(result, 'Which IRB', None),
-                        "Protocol Version & Date": getattr(result, 'Protocol Version & Date', None),
-                        "CTO Notes": getattr(result, 'CTO Notes', None),
-                        "CTPI Notes": getattr(result, 'CTPI Notes', None),
-                        "CA Develop Start Date": getattr(result, 'CA Develop Start Date', None),
-                        "CA SSM Appr. / Final Date": getattr(result, 'CASSM Appr. / Final Date', None),
-                        "CA Dev / Final TA": getattr(result, 'CA Dev / Final TA', None),
-                        "CA Submit / Start Dev TA": getattr(result, 'CA Submit / Start Dev TA', None),
-                        "CA Submit / Final TA": getattr(result, 'CA Submit / Final TA', None),
-                        "Budget Neg Start Date": getattr(result, 'Budget Neg Start Date', None),
-                        "Budget Final Date": getattr(result, 'Budget Final Date', None),
-                        "Budget Neg / Final TA": getattr(result, 'Budget Neg / Final TA', None),
-                        "Budget Submit / Final TA": getattr(result, 'Budget Submit / Final TA', None),
-                        "CTA Final Date": getattr(result, 'CTA Final Date', None),
-                        "CTA Submit / Final TA": getattr(result, 'CTA Submit / Final TA', None),
-                        "CTA FE Date": getattr(result, 'CTA FE Date', None),
-                        "CTA Final / FE TA": getattr(result, 'CTA Final / FE TA', None),
-                        "Local IRB Review Complete": getattr(result, 'Local IRB Review Complete', None),
-                        "CTO Checklist Rec'd": getattr(result, 'CTO Checklist Recd ', None),
-                        "IRB Ancillary Reviews Rec'd": getattr(result, 'IRBAncillaryReviewsRecd', None),
-                        "IRB Comments Sent": getattr(result, 'IRB Comments Sent', None),
-                        "IRB SAF Signed": getattr(result, 'IRB SAF Signed', None),
-                        "Final IRB Approval Date": getattr(result, 'Final IRB Approval Date', None),
-                        "Local IRB Review Complete TA": getattr(result, 'Local IRB Review Complete TA', None),
-                        "CTO Checklist Rec'd TA": getattr(result, 'CTO Checklist Recd TA', None),
-                        "IRB Ancillary Reviews Rec'd TA": getattr(result, 'IRB Ancillary Reviews Recd TA', None),
-                        "IRB Comment Sent TA": getattr(result, 'IRB Comment Sent TA', None),
-                        "SIRB Approval TA": getattr(result, 'SIRB Approval TA', None)
+                        "Orig. Submit Date": result['Orig. Submit Date'],
+                        "IRB Submit Date": result['IRB Submit Date'],
+                        "Pause Date": result['Pause Date'],
+                        "Restart Date": result['Restart Date'],
+                        "Est. Start Date": result['Est. Start Date'],
+                        "eRS/WD": result['eRS/WD'],
+                        "IRB": result['IRB'],
+                        "PI": result['PI'],
+                        "SC": result['SC'],
+                        "Dept": result['Dept'],
+                        "Study Feasibility": result['Study Feasibility'],
+                        "Sponsor / Protocol": result['Sponsor / Protocol'],
+                        "ICF": result['ICF'],
+                        "IDE IND": result['IDE IND'],
+                        "CTA": result['CTA'],
+                        "SSM Fac": result['SSM Fac'],
+                        "SSM Pharm": result['SSM Pharm'],
+                        "SSM RBR Approval": result['SSM RBR Approval'],
+                        "CTO CA": result['CTO CA'],
+                        "CTO Budget": result['CTO Budget'],
+                        "CTO IRB Check List": result['CTO IRB Check List'],
+                        "CTO CTMS": result['CTO CTMS'],
+                        "CTO/EPIC": result['CTO/EPIC'],
+                        "CTO WD Grant": result['CTO WD Grant'],
+                        "IRB Approval": result['IRB Approval'],
+                        "Status": result['Status'],
+                        "Type": result['Type'],
+                        "FY": result['FY'],
+                        "FQ": result['FQ'],
+                        "CTO DO": result['CTO DO'],
+                        "IRB DO": result['IRB DO'],
+                        "Goal": result['Goal'],
+                        "Rate": result['Rate'],
+                        "Complete Date": result['Complete Date'],
+                        "Project CTO TA": result['Project CTO TA'],
+                        "Project IRB TA": result['Project IRB TA'],
+                        "Which IRB": result['Which IRB'],
+                        "Protocol Version & Date": result['Protocol Version & Date'],
+                        "CTO Notes": result['CTO Notes'],
+                        "CTPI Notes": result['CTPI Notes'],
+                        "CA Develop Start Date": result['CA Develop Start Date'],
+                        "CA SSM Appr. / Final Date": result['CA SSM Appr. / Final Date'],
+                        "CA Dev / Final TA": result['CA Dev / Final TA'],
+                        "CA Submit / Start Dev TA": result['CA Submit / Start Dev TA'],
+                        "CA Submit / Final TA": result['CA Submit / Final TA'],
+                        "Budget Neg Start Date": result['Budget Neg Start Date'],
+                        "Budget Final Date": result['Budget Final Date'],
+                        "Budget Neg / Final TA": result['Budget Neg / Final TA'],
+                        "Budget Submit / Final TA": result['Budget Submit / Final TA'],
+                        "CTA Final Date": result['CTA Final Date'],
+                        "CTA Submit / Final TA": result['CTA Submit / Final TA'],
+                        "CTA FE Date": result['CTA FE Date'],
+                        "CTA Final / FE TA": result['CTA Final / FE TA'],
+                        "Local IRB Review Complete": result['Local IRB Review Complete'],
+                        "CTO Checklist Rec'd": result['CTO Checklist Recd'],
+                        "IRB Ancillary Reviews Rec'd": result['IRBAncillaryReviewsRecd'],
+                        "IRB Comments Sent": result['IRB Comments Sent'],
+                        "IRB SAF Signed": result['IRB SAF Signed'],
+                        "Final IRB Approval Date": result['Final IRB Approval Date'],
+                        "Local IRB Review Complete TA": result['Local IRB Review Complete TA'],
+                        "CTO Checklist Rec'd TA": result['CTO Checklist Recd TA'],
+                        "IRB Ancillary Reviews Rec'd TA": result['IRB Ancillary Reviews Recd TA'],
+                        "IRB Comment Sent TA": result['IRB Comment Sent TA'],
+                        "SIRB Approval TA": result['SIRB Approval TA']
                     }
                     for result in results
                 ]

@@ -29,7 +29,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from sqlalchemy import create_engine
 
-engine = create_engine('mssql+pyodbc:///?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server&server=HP&database=CTO') #update the string with your sql server and db details.
+#engine = create_engine('mssql+pyodbc:///?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server&server=HP&database=CTO') #update the string with your sql server and db details.
+
+engine = create_engine('mssql+pyodbc:///?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server&server=.&database=Data_5710')
+
 
 @app.route('/cto-data', methods=['POST'])
 def cto_data():
