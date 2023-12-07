@@ -25,23 +25,35 @@ def register_user():
 
     res = register_db(req)
     return jsonify(res)
+from sqlalchemy.orm import Session
+from sqlalchemy import text
+from sqlalchemy import create_engine
+
+engine = create_engine('mssql+pyodbc:///?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server&server=HP&database=CTO') #update the string with your sql server and db details.
 
 @app.route('/cto-data', methods=['POST'])
 def cto_data():
     try:
-        req_data = request.get_json()
+        # Fetch all data from the CTO table
+        with Session(engine) as session:
+            sql_statement = text("SELECT * FROM CTO")
+            query = session.execute(sql_statement)
+            results = query.fetchall()
 
-        if not req_data:
-            return jsonify({"error": "Invalid JSON data"})
+            # Get column names
+            columns = query.keys()
 
-        res = data_db(req_data)
-        
-        if 'error' in res:
-            return jsonify(res), 500  # Internal Server Error
-        else:
-            return jsonify(res)
+            # Convert the results to a list of dictionaries
+            data_list = [dict(zip(columns, row)) for row in results]
+
+            if data_list:
+                return jsonify(data_list)
+            else:
+                return jsonify({"error": "No matching records"})
     except Exception as e:
-        return jsonify({"error": str(e)}), 500  # Internal Server Error
+        print("Error:", e)
+        return jsonify({"error": "An error occurred"})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

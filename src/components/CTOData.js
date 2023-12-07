@@ -7,19 +7,21 @@ const CTOData = () => {
   const [ctoData, setCTOData] = useState([]);
   const [editedData, setEditedData] = useState({});
 
-  useEffect(() => {
-    // Fetch CTO data from the backend when the component mounts
-    axios.post(`${API_URL}/cto-data`, { /* Add any required parameters */ })
-      .then(response => {
-        // Check if the response.data has a 'data' key and if it's an array
-        if (response.data && Array.isArray(response.data)) {
-          setCTOData(response.data);
-        } else {
-          console.error('Invalid data structure in API response:', response.data);
-        }
-      })
-      .catch(error => console.error('Error fetching CTO data', error));
-  }, []);
+useEffect(() => {
+  // Fetch all CTO data from the backend when the component mounts
+  axios.post(`${API_URL}/cto-data`)  // No specific parameters in the request
+    .then(response => {
+      // Check if the response.data is an array
+      if (response.data && Array.isArray(response.data)) {
+        setCTOData(response.data);
+      } else {
+        console.error('Invalid data structure in API response:', response.data);
+      }
+    })
+    .catch(error => console.error('Error fetching CTO data', error));
+}, []);
+
+  
 
   const handleEdit = (field, value, index) => {
     // Update the editedData state when a field is edited
@@ -112,7 +114,6 @@ const CTOData = () => {
             <th>IRB Ancillary Reviews Rec'd TA</th>
             <th>IRB Comment Sent TA</th>
             <th>SIRB Approval TA</th>
-            {/* Add more headers for other fields */}
           </tr>
         </thead>
         <tbody>
@@ -182,15 +183,19 @@ const CTOData = () => {
               <td>{row['IRB Ancillary Reviews Recd TA']}</td>
               <td>{row['IRB Comment Sent TA']}</td>
               <td>{row['SIRB Approval TA']}</td>
-              {/* Add more cells for other fields */}
-              <td>
-                <input
-                  type="text"
-                  value={editedData[index]?.['Orig. Submit Date'] || row['Orig. Submit Date']}
-                  onChange={(e) => handleEdit('Orig. Submit Date', e.target.value, index)}
-                />
-              </td>
-              {/* Add more cells for other editable fields */}
+              {Object.keys(row).map((field) => (
+                <td key={field}>
+                   {editedData[index] && editedData[index][field] !== undefined ? (
+                    <input
+                    type="text"
+                    value={editedData[index]?.[field] !== null ? editedData[index]?.[field] : ''}
+                    onChange={(e) => handleEdit(field, e.target.value, index)}
+                    />
+                   ) : (
+                    row[field]
+                   )}
+                </td>
+                ))}
             </tr>
           ))}
         </tbody>
