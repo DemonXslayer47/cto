@@ -37,7 +37,7 @@ const AuthPage = () => {
       if (data.issuccess) {
         // Successful signup, navigate to the '/update-track' route
         console.log('Signup successful');
-        navigate('/track'); // Update the route as needed
+        navigate('/CTOData'); // Update the route as needed
       } else {
         console.error('Signup failed:', data.error);
       }
@@ -61,7 +61,7 @@ const AuthPage = () => {
       if (data.userId) {
         // Successful login, navigate to another page or perform an action
         console.log('Login successful');
-        navigate('/track'); // Change '/dashboard' to your desired route
+        navigate('/CTOData'); // Change '/dashboard' to your desired route
       } else {
         console.error('Login failed:', data.error);
       }

@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-from Database import register_db, login_db, data_db
 from flask_cors import CORS
+from Database import register_db, login_db, data_db
 
 app = Flask(__name__)
 CORS(app)
@@ -26,55 +26,22 @@ def register_user():
     res = register_db(req)
     return jsonify(res)
 
+@app.route('/cto-data', methods=['POST'])
+def cto_data():
+    try:
+        req_data = request.get_json()
 
-@app.route('/update', methods=['POST'])
-def update():
-    req = request.get_json()
-    print(req)
-    # Call the function for update
-    # res = update_db(req)
-    # return jsonify(res)
-    return jsonify({"message": "Update endpoint called"})
+        if not req_data:
+            return jsonify({"error": "Invalid JSON data"})
 
-# @app.route('/track', methods=['GET'])  # Change to GET method
-# def track():
-#     try:
-#         # Call the function to fetch data
-#         data = data_db()  # Implement this function in Database.py
-#         return jsonify(data)
-#     except Exception as e:
-#         print("Error:", e)
-#         return jsonify({"error": "An error occurred"})
-    
-    # API endpoint for tracking
-@app.route('/track', methods=['POST'])
-def track_data():
-    req = request.get_json()
-    res = data_db(req)  # Implement data_db function to filter data based on req
-    return jsonify(res)
-
-
-@app.route('/data', methods=['POST'])
-def data():
-    req = request.get_json()
-    print(req)
-    res = data_db(req)
-    return jsonify(res)
-
-# @app.route('/pidata', methods=['POST'])
-# def pidata():
-#     req = request.get_json()
-#     print(req)
-#     res = pidata_db(req)
-#     return jsonify(res)
-
-
-# @app.route('/irbdata', methods=['POST'])
-# def irbdata():
-#     req = request.get_json()
-#     print(req)
-#     res = irbdata_db(req)
-#     return jsonify(res)
+        res = data_db(req_data)
+        
+        if 'error' in res:
+            return jsonify(res), 500  # Internal Server Error
+        else:
+            return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Internal Server Error
 
 if __name__ == "__main__":
     app.run(debug=True)

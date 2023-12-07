@@ -1,5 +1,4 @@
-// Inside TrackAndUpdateComponent.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import API_URL from './constants';
 import './TrackAndUpdateComponent.css';
@@ -9,21 +8,25 @@ function TrackAndUpdateComponent() {
   const [filterField, setFilterField] = useState('');
   const [filterValue, setFilterValue] = useState('');
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.post(`${API_URL}/track`, {
         [filterField]: filterValue,
       });
 
-      setData(response.data);
+      // Convert object to an array of key-value pairs
+      const dataArray = Object.entries(response.data).map(([key, value]) => ({ key, value }));
+
+      setData(dataArray || []);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error fetching data:', error);
+      // You might want to set an error state or display a message to the user
     }
-  };
+  }, [filterField, filterValue]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]); // Add fetchData to the dependency array
 
   const handleFilterFieldChange = (e) => {
     setFilterField(e.target.value);
@@ -37,9 +40,14 @@ function TrackAndUpdateComponent() {
     fetchData();
   };
 
-  const handleUpdate = () => {
-    // Add logic to handle the update (send data to the backend)
-    console.log('Updating data:', data);
+  const handleUpdate = async () => {
+    try {
+      // Add logic to handle the update (send data to the backend)
+      const response = await axios.post(`${API_URL}/update`, { updatedData: data });
+      console.log('Update response:', response.data);
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
   };
 
   return (
@@ -67,27 +75,30 @@ function TrackAndUpdateComponent() {
         <button onClick={handleFilterSubmit}>Submit</button>
       </div>
 
-        <div className="filtered-data">
-            <h2>Filtered Data:</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Field</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {Object.entries(data).map(([key, value]) => (
-                        <tr key={key}>
-                            <td><strong>{key}</strong></td>
-                            <td>{value}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <button onClick={handleUpdate}>Update</button>
-        </div>
-
+      <div className="filtered-data">
+        <h2>Filtered Data:</h2>
+        <table>
+          <thead>
+            <tr>
+              {Object.keys(data[0] || {}).map((key) => (
+                <th key={key}>{key}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row, index) => (
+              <tr key={index}>
+                {Object.values(row).map((value, index) => (
+                  <td key={index}>{value}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button onClick={handleUpdate} disabled={!data.length}>
+          Update
+        </button>
+      </div>
     </div>
   );
 }
