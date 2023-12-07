@@ -2,10 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import API_URL from './constants';
+import './CTOData.css';
 
 const CTOData = () => {
   const [ctoData, setCTOData] = useState([]);
   const [editedData, setEditedData] = useState({});
+  const [filterAttribute, setFilterAttribute] = useState('');
+  const [filterValue, setFilterValue] = useState('');
 
 useEffect(() => {
   // Fetch all CTO data from the backend when the component mounts
@@ -44,9 +47,36 @@ useEffect(() => {
       .catch(error => console.error('Error updating data', error));
   };
 
+  const handleFilter = () => {
+    // Implement filtering logic here
+    // You can use filterAttribute and filterValue to filter the ctoData array
+    // Update the ctoData state with the filtered data
+    // Example:
+    const filteredData = ctoData.filter(row => row[filterAttribute] === filterValue);
+    setCTOData(filteredData);
+  };
+
   return (
     <div>
       <h2>CTO Data</h2>
+      <div className="filter-section">
+        <select onChange={(e) => setFilterAttribute(e.target.value)}>
+          <option value="">Select Attribute</option>
+          {/* Add options for all attributes */}
+          <option value="IRB">IRB</option>
+          <option value="SC">SC</option>
+          <option value="PI">PI</option>
+          <option value="eRS/WD">eRS/WD</option>
+          {/* Add more options as needed */}
+        </select>
+        <input
+          type="text"
+          placeholder="Enter Value"
+          value={filterValue}
+          onChange={(e) => setFilterValue(e.target.value)}
+        />
+        <button onClick={handleFilter}>Filter</button>
+      </div>
       <table>
         <thead>
           <tr>
